@@ -1,0 +1,55 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+
+
+# === FRONTEND IGNORE RULES ===
+
+# Logs
+brain-tumor-frontend/logs
+brain-tumor-frontend/*.log
+brain-tumor-frontend/npm-debug.log*
+brain-tumor-frontend/yarn-debug.log*
+brain-tumor-frontend/yarn-error.log*
+brain-tumor-frontend/pnpm-debug.log*
+brain-tumor-frontend/lerna-debug.log*
+
+# Dependencies and builds
+brain-tumor-frontend/node_modules/
+brain-tumor-frontend/dist/
+brain-tumor-frontend/dist-ssr/
+brain-tumor-frontend/*.local
+
+# Editor and system files
+brain-tumor-frontend/.vscode/*
+!brain-tumor-frontend/.vscode/extensions.json
+brain-tumor-frontend/.idea/
+brain-tumor-frontend/.DS_Store
+brain-tumor-frontend/*.suo
+brain-tumor-frontend/*.ntvs*
+brain-tumor-frontend/*.njsproj
+brain-tumor-frontend/*.sln
+brain-tumor-frontend/*.sw?
+
