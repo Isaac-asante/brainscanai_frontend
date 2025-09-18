@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { History, Download, Trash2, Eye, Calendar, Percent, AlertTriangle, CheckCircle, MoreHorizontal } from 'lucide-react'
+import { History, Download, Trash2, Eye, Calendar, Percent, AlertTriangle, CheckCircle, MoreHorizontal, ChevronDown } from 'lucide-react'
 import { format } from 'date-fns'
 
 const PredictionHistory = ({ predictions, onDelete, onDeleteAll, onDownload, onViewHeatmap }) => {
   const [deleteConfirm, setDeleteConfirm] = useState(null)
   const [showOptions, setShowOptions] = useState(null)
+  const [showDownloadMenu, setShowDownloadMenu] = useState(false)
 
   const formatDate = (dateString) => {
     try {
@@ -31,6 +32,11 @@ const PredictionHistory = ({ predictions, onDelete, onDeleteAll, onDownload, onV
     }
   }
 
+  const handleDownloadSelect = (format) => {
+    onDownload(format)
+    setShowDownloadMenu(false)
+  }
+
   // Helper function to determine if result is tumor (case-insensitive)
   const isTumorResult = (result) => {
     if (!result) return false
@@ -46,6 +52,12 @@ const PredictionHistory = ({ predictions, onDelete, onDeleteAll, onDownload, onV
     if (lowerResult === 'non-tumor' || lowerResult === 'non-tumour' || lowerResult === 'no tumor') return 'Non-Tumor'
     return result
   }
+
+  const downloadOptions = [
+    { value: 'csv', label: 'CSV Format', icon: '📊' },
+    { value: 'pdf', label: 'PDF Report', icon: '📄' },
+    { value: 'json', label: 'JSON Data', icon: '📋' }
+  ]
 
   return (
     <div className="glass-card p-6">
@@ -63,16 +75,40 @@ const PredictionHistory = ({ predictions, onDelete, onDeleteAll, onDownload, onV
         </div>
 
         <div className="flex items-center space-x-2">
-          <select
-            onChange={(e) => onDownload(e.target.value)}
-            className="glass-input text-sm px-3 py-2"
-            defaultValue=""
-          >
-            <option value="" disabled>Download</option>
-            <option value="csv">CSV Format</option>
-            <option value="pdf">PDF Report</option>
-            <option value="json">JSON Data</option>
-          </select>
+          {/* Custom Download Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setShowDownloadMenu(!showDownloadMenu)}
+              className="glass-button-secondary px-4 py-2 text-sm flex items-center space-x-2"
+              disabled={predictions.length === 0}
+            >
+              <Download className="w-4 h-4" />
+              <span>Download</span>
+              <ChevronDown className={`w-4 h-4 transition-transform ${showDownloadMenu ? 'rotate-180' : ''}`} />
+            </button>
+
+            <AnimatePresence>
+              {showDownloadMenu && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                  className="absolute right-0 top-full mt-2 bg-gray-800 border border-white/20 rounded-lg shadow-xl z-20 min-w-[160px] overflow-hidden"
+                >
+                  {downloadOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => handleDownloadSelect(option.value)}
+                      className="w-full px-4 py-3 text-left text-white hover:bg-white/10 transition-colors flex items-center space-x-3 border-b border-white/10 last:border-b-0"
+                    >
+                      <span className="text-lg">{option.icon}</span>
+                      <span className="text-sm font-medium">{option.label}</span>
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
           {predictions.length > 0 && (
             <button
@@ -85,6 +121,14 @@ const PredictionHistory = ({ predictions, onDelete, onDeleteAll, onDownload, onV
           )}
         </div>
       </div>
+
+      {/* Click outside to close dropdown */}
+      {showDownloadMenu && (
+        <div 
+          className="fixed inset-0 z-10" 
+          onClick={() => setShowDownloadMenu(false)}
+        />
+      )}
 
       {predictions.length === 0 ? (
         <div className="text-center py-12">
