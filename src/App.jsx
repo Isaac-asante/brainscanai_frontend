@@ -9,7 +9,7 @@ import PublicRoute from './components/auth/PublicRoute'
 import AuthPage from './pages/AuthPage'
 import EmailVerification from './pages/EmailVerification'
 import DoctorDashboard from './pages/DoctorDashboard'
-import AdminDashboard from './Pages/AdminDashboard'
+import AdminDashboard from './pages/AdminDashboard'
 import NotFound from './pages/NotFound'
 
 function App() {
